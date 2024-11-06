@@ -1,26 +1,61 @@
 import gradio as gr
-import numpy as np
-import matplotlib.pyplot as plt
 
-from src.boards import GenerateBoard
+from src.utils import randomize_board
 
 TITLE = """<h1 align="center" id="space-title"> Pento-LLaVA 🤖🎯🎮</h1>"""
 
-initial_board_image, target_positions, info = GenerateBoard('easy', 18).setup_initial_board() 
-
-# Convert initial_board_image to a matplotlib figure
-fig, ax = plt.subplots()
-ax.imshow(initial_board_image)
-ax.axis('off')
-
 pento_llava_app = gr.Blocks()
+fig, targets, info = randomize_board('easy', 18)
+
+target_strs = []
+for t in targets:
+    target_strs.append(t['target_str'])
+
+def gen_new_board():
+    fig, targets, info = randomize_board('easy', 18)
+    target_strs = []
+    for t in targets:
+        target_strs.append(t['target_str'])
+
+    return fig, target_strs
 
 with pento_llava_app:
 
     gr.HTML(TITLE)
-    gr.Plot(fig)
+
+    with gr.Row():
+        with gr.Column():    
+            main_board = gr.Plot(fig)
+
+        with gr.Column():
+            select_target = gr.Dropdown(
+                choices = target_strs,
+                value=target_strs[0],
+                label="Select the target piece",
+                allow_custom_value=True
+            )
+    
+    random_button = gr.Button(
+        value='Randomize Board'
+    )
+
+    random_button.click(
+        gen_new_board,
+        outputs=[main_board, select_target]
+    )
+
 
     pento_llava_app.load()
 
 pento_llava_app.queue()
 pento_llava_app.launch()
+
+
+"""
+TODOS
+
+Set Board selection - 0-514
+(Remove randomization)
+
+...
+"""

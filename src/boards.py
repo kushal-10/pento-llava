@@ -29,10 +29,11 @@ class GenerateBoard():
         info = metadata_obj['info']
         target_options = []
         for piece in info:
+            target_info_dict = {}
             target = f"{piece['piece_colour']} {piece['piece_shape']} at {piece['piece_region']}" 
-            target_options.append(target)
-
-
+            target_info_dict['target_str'] = target
+            target_info_dict['piece_info'] = piece
+            target_options.append(target_info_dict)
         
         env = GridWorldEnv(render_mode="rgb_array", size=self.board_size, grid_info=info, agent_pos=default_start_pos, target_pos=default_target_pos)
         env.reset()
