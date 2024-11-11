@@ -7,7 +7,7 @@ import numpy as np
 
 class GenerateBoard():
 
-    def __init__(self, level: str, board_size: int):
+    def __init__(self, level: str, board_size: int, board_number: int):
         self.level = level
         self.board_size = board_size
 
@@ -16,9 +16,8 @@ class GenerateBoard():
         with open(metadata_path, 'r') as f:
             metadata = json.load(f)
 
-        num_boards = len(metadata)
-        random_board_num = np.random.randint(0, num_boards)
-        self.board_data = metadata[random_board_num]
+        self.board_num = board_number
+        self.board_data = metadata[self.board_num]
     
     def setup_initial_board(self):
 

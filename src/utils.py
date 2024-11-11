@@ -1,14 +1,12 @@
 from src.boards import GenerateBoard
-import matplotlib.pyplot as plt
-import matplotlib
-matplotlib.use('Agg')
+import plotly.express as px  # Import Plotly Express
 
-def randomize_board(level: str = 'easy', size: int = 18):
-    initial_board_image, target_positions, info = GenerateBoard(level, size).setup_initial_board() 
+def select_board(level: str = 'easy', size: int = 18, board_number: int = 0):
+    initial_board_image, target_positions, info = GenerateBoard(level, size, board_number).setup_initial_board() 
 
-    # Convert initial_board_image to a matplotlib figure
-    fig, ax = plt.subplots()
-    ax.imshow(initial_board_image)
-    ax.axis('off')
+    # Convert initial_board_image to a Plotly figure
+    fig = px.imshow(initial_board_image)  # Use Plotly's imshow
+    fig.update_xaxes(showticklabels=False)  # Hide x-axis ticks
+    fig.update_yaxes(showticklabels=False)  # Hide y-axis ticks
 
     return fig, target_positions, info
