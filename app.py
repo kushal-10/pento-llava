@@ -1,6 +1,4 @@
 import gradio as gr
-import numpy as np
-import plotly.graph_objects as go
 
 from src.utils import select_board
 
