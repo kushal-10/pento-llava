@@ -1,6 +1,8 @@
 import gradio as gr
 
 from src.utils import select_board
+from src.play import PlayEpisode as Play
+import plotly.express as px
 
 TITLE = """<h1 align="center" id="space-title"> Pento-LLaVA 🤖🎯🎮</h1>"""
 
@@ -49,6 +51,20 @@ def gen_target_str(value):
 
     return target_str
 
+def setup_play(value):
+    play = Play('easy', 18, value)
+    initial_image = play.get_initial_image()
+
+    image = play.play_instance(model=None, processor=None, input_image=initial_image)
+    initial_board_image = image
+
+    fig = px.imshow(initial_board_image)  # Use Plotly's imshow with gray scale
+    fig.update_xaxes(showticklabels=False)  # Hide x-axis ticks
+    fig.update_yaxes(showticklabels=False)  # Hide y-axis ticks
+
+    return fig
+
+
 
 with pento_llava_app:
 
@@ -64,6 +80,8 @@ with pento_llava_app:
                     choices=range(512),
                     interactive=True
                 )
+                
+                play_button = gr.Button("Play")  # Add Play button
 
             with gr.Row():
                  display_string = gr.HTML(value=gen_target_str(0)) 
@@ -83,6 +101,12 @@ with pento_llava_app:
                 queue=True
             )
 
+            play_button.click(  # Set up button click event
+                fn=setup_play,
+                inputs=[select_board_items],
+                outputs=[main_board],
+                queue=True
+            )
 
     pento_llava_app.load()
 
