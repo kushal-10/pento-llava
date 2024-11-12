@@ -39,14 +39,5 @@ class GenerateBoard():
         image = env.render()
         image = Image.fromarray(image)
 
-        # Convert all white pixels to gray
-        image = image.convert("RGBA")  # Ensure the image has an alpha channel
-        data = np.array(image)  # Convert image to numpy array
-        # Create a mask for white pixels
-        white_pixels = (data[:, :, :3] == [255, 255, 255]).all(axis=2)
-        data[white_pixels] = [200, 200, 200, 20]
-
-        image = Image.fromarray(data)  # Convert back to image
-
         return image, target_options, info
 
